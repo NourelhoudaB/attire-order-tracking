@@ -1,0 +1,18 @@
+# Optional PostgreSQL client for an operator's full backup of Netlify Database.
+# The application itself runs on Netlify; this is not an alternative database.
+services:
+  backup:
+    image: postgres:16-alpine
+    profiles: [operations]
+    environment:
+      PGHOST:
+      PGPORT:
+      PGDATABASE:
+      PGUSER:
+      PGPASSWORD:
+      PGSSLMODE: require
+      BACKUP_DIR: /backups
+    volumes:
+      - ./scripts/backup.sh:/scripts/backup.sh:ro
+      - ./backups:/backups
+    entrypoint: ["sh", "/scripts/backup.sh"]
